@@ -1,0 +1,28 @@
+{
+  "name": "game-backroom",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npx webpack build",
+    "dev": "npx webpack -w & npx live-server"
+  },
+  "repository": "git@github.com:Clement-Muth/game-backroom.git",
+  "author": "Clement-Muth <clementmuth@gmail.com>",
+  "license": "MIT",
+  "homepage": "./src/index.html",
+  "devDependencies": {
+    "@biomejs/biome": "^1.6.2",
+    "@swc/cli": "^0.3.10",
+    "@swc/core": "^1.4.8",
+    "html-webpack-plugin": "^5.6.0",
+    "swc-loader": "^0.2.6",
+    "typescript": "^5.4.2",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.3",
+    "workbox-precaching": "^7.0.0",
+    "workbox-webpack-plugin": "^7.0.0"
+  },
+  "dependencies": {
+    "js-cache": "^1.0.3"
+  }
+}
