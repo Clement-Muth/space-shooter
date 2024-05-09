@@ -11,3 +11,5 @@ yarn install
 ```bash
 yarn dev
 ```
+
+Go to `localhost:8080`
