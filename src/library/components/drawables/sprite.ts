@@ -55,6 +55,11 @@ export default class Sprite implements View {
     this.currentFrameStartTime = 0;
   }
 
+  public udpateFrames = (frames: SpriteFrame[]) => {
+    this.frames = frames;
+    this.currentFrameIndex = 0;
+  };
+
   /**
    * Renders the sprite on the canvas.
    * @param ctx The rendering context of the canvas.
@@ -62,6 +67,8 @@ export default class Sprite implements View {
    */
   public render = (ctx: CanvasRenderingContext2D, parents: Container[]) => {
     const currentFrame = this.frames[this.currentFrameIndex];
+    currentFrame.image.x = this.x;
+    currentFrame.image.y = this.y;
     currentFrame.image.render(ctx, parents);
 
     const now = Date.now();
