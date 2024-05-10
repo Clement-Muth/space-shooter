@@ -66,6 +66,7 @@ export default class Application {
     resizeTo,
   }: { background: string; resizeTo: Window }) => {
     window.addEventListener("resize", this.onResize);
+    this.canvas.style.background = background;
     this.ctx.fillStyle = background;
     this.canvas.width = resizeTo.innerWidth;
     this.canvas.height = resizeTo.innerHeight;

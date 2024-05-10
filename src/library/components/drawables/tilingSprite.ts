@@ -41,6 +41,9 @@ export default class TilingSprite {
    */
   public height: number;
 
+  public x: number;
+  public y: number;
+
   /**
    * The image element used for the TilingSprite.
    */
@@ -60,6 +63,8 @@ export default class TilingSprite {
     this.width = width;
     this.height = height;
     this.image = image;
+    this.x = 0;
+    this.y = 0;
   }
 
   /**
@@ -80,8 +85,8 @@ export default class TilingSprite {
 
     ctx.drawImage(
       this.image,
-      absoluteX + 0,
-      absoluteY + 0,
+      absoluteX + this.x,
+      absoluteY + this.y,
       this.width,
       this.height,
     );
