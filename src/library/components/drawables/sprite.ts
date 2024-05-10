@@ -10,6 +10,15 @@ interface SpriteFrame {
   duration: number;
 }
 
+interface AnimationSpriteFrame {
+  idle: SpriteFrame[];
+  moveSouth: SpriteFrame[];
+  moveNorth: SpriteFrame[];
+  moveEast: SpriteFrame[];
+  moveWest: SpriteFrame[];
+  layDown: SpriteFrame[];
+}
+
 /**
  * Sprite Class
  *
@@ -26,6 +35,11 @@ export default class Sprite implements View {
    * Indicates if the sprite is interactive.
    */
   public interactive: boolean;
+
+  /**
+   * The list of all possible animation frames of the sprite.
+   */
+  public animationFrames: AnimationSpriteFrame;
 
   /**
    * The list of animation frames of the sprite.
@@ -46,11 +60,15 @@ export default class Sprite implements View {
    * Constructs a new instance of Sprite.
    * @param frames The list of animation frames of the sprite.
    */
-  constructor(frames: SpriteFrame[]) {
+  constructor(
+    defaultFrames: keyof AnimationSpriteFrame,
+    animationFrames: AnimationSpriteFrame,
+  ) {
     this.x = 0;
     this.y = 0;
     this.interactive = false;
-    this.frames = frames;
+    this.animationFrames = animationFrames;
+    this.frames = this.animationFrames[defaultFrames];
     this.currentFrameIndex = 0;
     this.currentFrameStartTime = 0;
   }

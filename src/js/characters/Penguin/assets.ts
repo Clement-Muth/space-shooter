@@ -9,7 +9,7 @@ const getPenguinAssets = () => {
     }),
     duration: 120,
   }));
-  const south = [...Array(4)].map((_, i) => ({
+  const moveSouth = [...Array(4)].map((_, i) => ({
     image: new TilingSprite({
       texture: Texture.from(`penguin-move-south-${i}`),
       width: 176,
@@ -17,7 +17,7 @@ const getPenguinAssets = () => {
     }),
     duration: 120,
   }));
-  const north = [...Array(4)].map((_, i) => ({
+  const moveNorth = [...Array(4)].map((_, i) => ({
     image: new TilingSprite({
       texture: Texture.from(`penguin-move-north-${i}`),
       width: 176,
@@ -25,7 +25,7 @@ const getPenguinAssets = () => {
     }),
     duration: 120,
   }));
-  const east = [...Array(4)].map((_, i) => ({
+  const moveEast = [...Array(4)].map((_, i) => ({
     image: new TilingSprite({
       texture: Texture.from(`penguin-move-east-${i}`),
       width: 176,
@@ -33,7 +33,7 @@ const getPenguinAssets = () => {
     }),
     duration: 120,
   }));
-  const west = [...Array(4)].map((_, i) => ({
+  const moveWest = [...Array(4)].map((_, i) => ({
     image: new TilingSprite({
       texture: Texture.from(`penguin-move-west-${i}`),
       width: 176,
@@ -51,7 +51,7 @@ const getPenguinAssets = () => {
     duration: 120,
   }));
 
-  return { idle, south, north, east, west, layDown };
+  return { idle, moveSouth, moveNorth, moveEast, moveWest, layDown };
 };
 
 export const penguinAssets = [
