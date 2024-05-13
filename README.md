@@ -1,4 +1,10 @@
+![Enregistrement de l’écran 2024-05-13 à 12 56 47 (2)](https://github.com/Clement-Muth/boids-game/assets/58605856/2ded468e-1e69-44b3-aa4b-fcb9fe77fc12)
+
 # boids-game
+
+## Description
+
+Space shooter game like, Two players
 
 ## Installation
 
