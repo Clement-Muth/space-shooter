@@ -1,5 +1,4 @@
 import { Application, Assets } from "../library";
-import { shipAssets } from "./characters/Ship/assets";
 import Loose from "./scenes/Loose";
 import InGame from "./scenes/inGame";
 import Menu from "./scenes/menu";
@@ -10,8 +9,11 @@ import Menu from "./scenes/menu";
   await application.init({ background: "#0d1117", resizeTo: window });
 
   await Assets.load([
-    ...shipAssets,
     { alias: "bonus", src: "/public/static/assets/collectable/bonus.png" },
+    ...[...Array(24)].map((_, i) => ({
+      alias: `ship2-${i}`,
+      src: `/public/static/assets/sprites/ships/ship2/ship-${i}.png`,
+    })),
     ...[...Array(200)].map((_, i) => ({
       alias: `bg-level3-${i}`,
       src: `/public/static/assets/bg/bg3/ezgif-frame-${(i + 1)
@@ -92,14 +94,16 @@ import Menu from "./scenes/menu";
 
   const game = new InGame({
     size: application.screen,
-    onLoose: (player) => {
+    onLoose: (player, level) => {
       game.stop();
       application.stage.removeChild(game.view);
+      console.log("stage", application.stage);
       application.stage.addChild(
         new Loose({
           onPause: () => {},
           onStart: () => {},
           player: player,
+          level,
         }).start(),
       );
     },

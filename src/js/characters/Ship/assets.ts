@@ -1,49 +1,49 @@
 import { Texture, TilingSprite } from "../../../library";
 
 const getShipAssets = ({ width = 176, height = 135 }) => {
-  const idle = [...Array(22)].map((_, i) => ({
+  const idle = [...Array(24)].map((_, i) => ({
     image: new TilingSprite({
-      texture: Texture.from(`ship-${i}`),
+      texture: Texture.from(`ship2-${i}`),
       width: width,
       height: height,
     }),
     duration: 100,
   }));
-  const layDown = [...Array(22)].map((_, i) => ({
+  const layDown = [...Array(24)].map((_, i) => ({
     image: new TilingSprite({
-      texture: Texture.from(`ship-${i}`),
+      texture: Texture.from(`ship2-${i}`),
       width: width,
       height: height,
     }),
     duration: 100,
   }));
-  const moveEast = [...Array(22)].map((_, i) => ({
+  const moveEast = [...Array(24)].map((_, i) => ({
     image: new TilingSprite({
-      texture: Texture.from(`ship-${i}`),
+      texture: Texture.from(`ship2-${i}`),
       width: width,
       height: height,
     }),
     duration: 100,
   }));
-  const moveNorth = [...Array(22)].map((_, i) => ({
+  const moveNorth = [...Array(24)].map((_, i) => ({
     image: new TilingSprite({
-      texture: Texture.from(`ship-${i}`),
+      texture: Texture.from(`ship2-${i}`),
       width: width,
       height: height,
     }),
     duration: 100,
   }));
-  const moveSouth = [...Array(22)].map((_, i) => ({
+  const moveSouth = [...Array(24)].map((_, i) => ({
     image: new TilingSprite({
-      texture: Texture.from(`ship-${i}`),
+      texture: Texture.from(`ship2-${i}`),
       width: width,
       height: height,
     }),
     duration: 100,
   }));
-  const moveWest = [...Array(22)].map((_, i) => ({
+  const moveWest = [...Array(24)].map((_, i) => ({
     image: new TilingSprite({
-      texture: Texture.from(`ship-${i}`),
+      texture: Texture.from(`ship2-${i}`),
       width: width,
       height: height,
     }),
@@ -54,9 +54,9 @@ const getShipAssets = ({ width = 176, height = 135 }) => {
 };
 
 export const shipAssets = [
-  ...[...Array(22)].map((_, i) => ({
-    alias: `ship-${i}`,
-    src: `/public/static/assets/sprites/ships/ship1/ship-${i + 1}.png`,
+  ...[...Array(24)].map((_, i) => ({
+    alias: `ship2-${i}`,
+    src: `/public/static2/assets/sprites/ships/ship2/ship-${i + 1}.png`,
   })),
 ];
 

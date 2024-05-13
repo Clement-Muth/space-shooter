@@ -10,7 +10,7 @@ const Player2 = () =>
         south: "ArrowDown",
         west: "ArrowLeft",
       },
-      size: { width: 70, height: 70 },
+      size: { width: 90, height: 90 },
       color: "blue",
     }),
   );

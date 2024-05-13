@@ -7,6 +7,7 @@ import Sprite from "./components/drawables/sprite";
 import Text from "./components/drawables/text";
 import TilingSprite from "./components/drawables/tilingSprite";
 import Collision from "./components/functions/collision";
+import Sound from "./components/sounds/sound";
 
 export {
   Application,
@@ -18,4 +19,5 @@ export {
   TilingSprite,
   Sprite,
   Scene,
+  Sound,
 };
