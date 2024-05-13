@@ -1,4 +1,4 @@
-import { Application, Container, type Scene } from "../../../library";
+import { Container, type Scene } from "../../../library";
 import Ticker from "../../../library/components/functions/ticker";
 import type Player from "../../players";
 import Player1 from "../../players/player1";
@@ -9,13 +9,11 @@ export default class InGame implements Scene {
   public view: Container;
   public size: { width: number; height: number };
 
-  private _app: Application = Application.getInstance();
   private _level: Scene;
   private _currentLevel = 1;
   private _startInterval: NodeJS.Timeout;
   private _ticker: Ticker;
   private _players: Player[] = [];
-  private _isChangingLevel: boolean;
   private _onLoose: (player: Player) => void;
 
   constructor({
@@ -31,38 +29,22 @@ export default class InGame implements Scene {
 
     this._ticker = new Ticker();
 
-    this._isChangingLevel = false;
     this._level = new Level({
       level: this._currentLevel,
       size,
       players: this._players,
+      onChangeLevel: this._onChangeLevel,
     });
   }
 
-  private _isOutsideBondary = () => {
-    if (this._isChangingLevel) return;
-
-    for (const ship of this._players.map((player) => player.ship)) {
-      if (
-        ship.sprite.x < 0 ||
-        ship.sprite.x > this._app.canvas.width ||
-        ship.sprite.y < 0 ||
-        ship.sprite.y > this._app.canvas.height
-      ) {
-        this._isChangingLevel = true;
-        this._onChangeLevel();
-      }
-    }
-  };
-
   private _onChangeLevel = () => {
-    this._players.map((player) => player.initPlayer);
-    this._level.stop(this.view);
+    this._level.stop();
     this._currentLevel++;
     this._level = new Level({
       level: this._currentLevel,
       size: this.size,
       players: this._players,
+      onChangeLevel: this._onChangeLevel,
     });
 
     this.view.addChild(
@@ -70,7 +52,6 @@ export default class InGame implements Scene {
       ...this._players.map((player) => player.score),
       ...this._players.map((player) => player.ship).map((c) => c.view),
     );
-    this._isChangingLevel = false;
   };
 
   private _gameEventListener = () => {
@@ -79,7 +60,6 @@ export default class InGame implements Scene {
         this._onLoose(player);
       }
     }
-    this._isOutsideBondary();
   };
 
   public start = () => {
@@ -97,6 +77,9 @@ export default class InGame implements Scene {
   public stop = () => {
     clearInterval(this._startInterval);
     this._ticker.remove(this._gameEventListener);
-    this._level.stop(this.view);
+    this._ticker.destroy();
+    this._level.stop();
+    this._players.map((player) => player.ship.detroy());
+    this.view.removeChild(this._level);
   };
 }

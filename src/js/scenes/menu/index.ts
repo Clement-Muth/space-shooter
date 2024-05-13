@@ -31,7 +31,7 @@ export default class Menu implements Scene {
       style: { fontFamily: "Orbitron" },
     });
 
-    this._title.x = this._app.canvas.width / 2 - 80;
+    this._title.x = this._app.canvas.width / 2 - this._title.width;
     this._title.y = this._app.canvas.height / 2 - 20;
     this._title.interactive = true;
 

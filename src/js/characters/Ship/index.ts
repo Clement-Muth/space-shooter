@@ -10,6 +10,7 @@ export default class Ship {
   public color: "red" | "blue";
   public missiles: Missile[];
 
+  private _level: number;
   private fireRate: number;
   private lastFireTime: number;
 
@@ -20,6 +21,7 @@ export default class Ship {
     this.lastFireTime = 0;
     this.missiles = [];
     this.color = color;
+    this._level = 10;
 
     const shipAssets = getShipAssets(this.size);
 
@@ -32,6 +34,14 @@ export default class Ship {
 
     this.view.addChild(this.sprite);
   }
+
+  public detroy = () => {
+    this.missiles.map((missile) => {
+      missile.destroy();
+      this.view.removeChild(missile.view);
+    });
+    this.missiles = [];
+  };
 
   update(delta: number) {
     this.handleFiring(delta);
@@ -48,14 +58,21 @@ export default class Ship {
   }
 
   fireMissile() {
-    const missile = new Missile({
-      x: this.sprite.x + this.size.width / 2,
-      y: this.sprite.y,
-      color: this.color,
-    });
+    for (let i = 0; i !== this._level; i++) {
+      const missile = new Missile({
+        x:
+          i === 0
+            ? this.sprite.x + this.size.width / 2
+            : this.sprite.x + this.size.width / 2 - 15,
+        y: this.sprite.y,
+        color: this.color,
+        level: this._level,
+        occurence: i + 1,
+      });
 
-    this.missiles.push(missile);
-    this.view.addChild(missile.view);
+      this.missiles.push(missile);
+      this.view.addChild(missile.view);
+    }
   }
 
   updateMissiles(delta: number) {
@@ -68,16 +85,24 @@ export default class Ship {
       }
     }
   }
+
+  public upgrade = () => {
+    this._level = this._level + 1;
+  };
 }
 
 class Missile {
   public view: Container;
   public sprite: TilingSprite;
   public speed: number;
+  private _occurence: number;
+  private _level: number;
 
-  constructor({ x, y, color }) {
+  constructor({ x, y, color, level, occurence }) {
     this.view = new Container();
 
+    this._level = level;
+    this._occurence = occurence;
     this.sprite = new TilingSprite({
       texture: Texture.from(color === "red" ? "missile-red" : "missile-blue"),
       height: 20,
@@ -98,6 +123,42 @@ class Missile {
 
   update(delta: number) {
     this.sprite.y -= this.speed * (delta / 1000);
+    switch (this._level) {
+      case 3: {
+        switch (this._occurence) {
+          case 1: {
+            this.sprite.x -= this.speed * (delta / 1000) - 5;
+            break;
+          }
+          case 2: {
+            this.sprite.x += this.speed * (delta / 1000) - 5;
+            break;
+          }
+        }
+        break;
+      }
+      default: {
+        switch (this._occurence) {
+          case 1: {
+            this.sprite.x -= this.speed * (delta / 1000) - 5;
+            break;
+          }
+          case 2: {
+            this.sprite.x -= this.speed * (delta / 1000) - 6;
+            break;
+          }
+          case 3: {
+            this.sprite.x += this.speed * (delta / 1000) - 8;
+            break;
+          }
+          case 4: {
+            this.sprite.x += this.speed * (delta / 1000) - 5;
+            break;
+          }
+        }
+      }
+    }
+
     if (this.sprite.y + this.sprite.height < 0) {
       this.destroy();
     }
