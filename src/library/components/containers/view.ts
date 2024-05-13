@@ -16,7 +16,7 @@ export default class View {
   /**
    * Indicates whether the view is interactive.
    */
-  public interactive: boolean;
+  public interactive?: boolean;
 
   /**
    * Function to check if the mouse is over the view.
@@ -26,7 +26,7 @@ export default class View {
    * @param parents The parent containers for calculating position.
    * @returns True if the mouse is over the view, otherwise false.
    */
-  public isMouseOver: (
+  public isMouseOver?: (
     mouseX: number,
     mouseY: number,
     ctx: CanvasRenderingContext2D,
