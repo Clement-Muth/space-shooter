@@ -121,7 +121,7 @@ export default class Level implements Scene {
       if (ship) {
         for (const player of this._players) {
           if (player.ship === ship) {
-            // handle player loose
+            player.onLoose();
           }
         }
       }
