@@ -96,6 +96,7 @@ export default class Level implements Scene {
     this.view.addChild(this._background, this._flock, this._title);
 
     this._players.map((player) => player.initPlayer());
+
     setTimeout(() => {
       this.view.removeChild(this._title);
     }, 2000);
@@ -113,7 +114,7 @@ export default class Level implements Scene {
         }, 2000);
       }
 
-      for (const ship of this._ships) ship.update(6);
+      for (const ship of this._ships) ship.shoot(6);
 
       for (const collision of boidShipCollisions) {
         const boid = collision.boid;
@@ -152,7 +153,6 @@ export default class Level implements Scene {
           ship.sprite.y < 0 ||
           ship.sprite.y > this._app.canvas.height
         ) {
-          this.stop();
           this._onChangeLevel();
         }
       }

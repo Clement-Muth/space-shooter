@@ -1,4 +1,10 @@
-import { Container, Sprite, Texture, TilingSprite } from "../../../library";
+import {
+  Container,
+  Sound,
+  Sprite,
+  Texture,
+  TilingSprite,
+} from "../../../library";
 import Controller from "../../../library/components/functions/controller";
 import type Asteroid from "../asteroid";
 import getShipAssets from "./assets";
@@ -21,7 +27,7 @@ export default class Ship {
     this.lastFireTime = 0;
     this.missiles = [];
     this.color = color;
-    this._level = 10;
+    this._level = 1;
 
     const shipAssets = getShipAssets(this.size);
 
@@ -43,10 +49,10 @@ export default class Ship {
     this.missiles = [];
   };
 
-  update(delta: number) {
+  public shoot = (delta: number) => {
     this.handleFiring(delta);
     this.updateMissiles(delta);
-  }
+  };
 
   handleFiring(delta: number) {
     this.lastFireTime += delta;
@@ -73,6 +79,7 @@ export default class Ship {
       this.missiles.push(missile);
       this.view.addChild(missile.view);
     }
+    Missile.sound.play();
   }
 
   updateMissiles(delta: number) {
@@ -97,6 +104,7 @@ class Missile {
   public speed: number;
   private _occurence: number;
   private _level: number;
+  public static sound: Sound;
 
   constructor({ x, y, color, level, occurence }) {
     this.view = new Container();
@@ -108,6 +116,9 @@ class Missile {
       height: 20,
       width: 11,
     });
+
+    Missile.sound = new Sound("/public/static/sounds/shoot.wav");
+    Missile.sound.setVolume(0.25);
 
     this.sprite.x = x;
     this.sprite.y = y;
@@ -124,6 +135,10 @@ class Missile {
   update(delta: number) {
     this.sprite.y -= this.speed * (delta / 1000);
     switch (this._level) {
+      case 1:
+        break;
+      case 2:
+        break;
       case 3: {
         switch (this._occurence) {
           case 1: {
@@ -166,6 +181,7 @@ class Missile {
 
   destroy() {
     this.view.removeChild(this.view);
+    Missile.sound.stop();
   }
 
   /**

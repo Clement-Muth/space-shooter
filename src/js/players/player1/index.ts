@@ -5,7 +5,7 @@ const Player1 = () =>
   new Player(
     new Ship({
       controle: { north: "z", east: "d", south: "s", west: "q" },
-      size: { width: 70, height: 70 },
+      size: { width: 90, height: 90 },
       color: "red",
     }),
     true,

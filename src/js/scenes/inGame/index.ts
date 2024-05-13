@@ -14,12 +14,12 @@ export default class InGame implements Scene {
   private _startInterval: NodeJS.Timeout;
   private _ticker: Ticker;
   private _players: Player[] = [];
-  private _onLoose: (player: Player) => void;
+  private _onLoose: (player: Player, level: number) => void;
 
   constructor({
     size,
     onLoose,
-  }: { size: any; onLoose: (player: Player) => void }) {
+  }: { size: any; onLoose: (player: Player, level: number) => void }) {
     this.view = new Container();
     this.size = size;
     this._onLoose = onLoose;
@@ -39,6 +39,11 @@ export default class InGame implements Scene {
 
   private _onChangeLevel = () => {
     this._level.stop();
+    this.view.removeChild(
+      this._level,
+      ...this._players.map((player) => player.score),
+      ...this._players.map((player) => player.ship).map((c) => c.view),
+    );
     this._currentLevel++;
     this._level = new Level({
       level: this._currentLevel,
@@ -46,7 +51,6 @@ export default class InGame implements Scene {
       players: this._players,
       onChangeLevel: this._onChangeLevel,
     });
-
     this.view.addChild(
       this._level.start(),
       ...this._players.map((player) => player.score),
@@ -57,7 +61,9 @@ export default class InGame implements Scene {
   private _gameEventListener = () => {
     for (const player of this._players) {
       if (player.status === "loose") {
-        this._onLoose(player);
+        this.stop();
+        this._onLoose(player, this._currentLevel);
+        console.log("INGame", this.view);
       }
     }
   };
@@ -76,10 +82,13 @@ export default class InGame implements Scene {
 
   public stop = () => {
     clearInterval(this._startInterval);
-    this._ticker.remove(this._gameEventListener);
     this._ticker.destroy();
     this._level.stop();
-    this._players.map((player) => player.ship.detroy());
     this.view.removeChild(this._level);
+    this.view.removeChild(
+      this._level.view,
+      ...this._players.map((player) => player.score),
+      ...this._players.map((player) => player.ship).map((c) => c.view),
+    );
   };
 }

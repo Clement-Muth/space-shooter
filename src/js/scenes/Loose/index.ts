@@ -17,13 +17,20 @@ export default class Loose implements Scene {
   private _app: Application;
   private _title: Text;
   private _score: Text;
+  private _level: Text;
   private _background: Sprite;
 
   constructor({
     onStart,
     onPause,
     player,
-  }: { onStart: () => void; onPause: () => void; player: Player }) {
+    level,
+  }: {
+    onStart: () => void;
+    onPause: () => void;
+    player: Player;
+    level: number;
+  }) {
     this._app = Application.getInstance();
     this.view = new Container();
     this.onPause = onPause;
@@ -39,11 +46,19 @@ export default class Loose implements Scene {
       style: { fontFamily: "Orbitron" },
     });
 
+    this._level = new Text({
+      text: `You've reached the level ${level}`,
+      style: { fontFamily: "Orbitron" },
+    });
+
     this._title.x = this._app.canvas.width / 2 - this._title.width / 2;
     this._title.y = this._app.canvas.height / 2 - 20;
 
     this._score.x = this._app.canvas.width / 2 - this._score.width / 2;
     this._score.y = this._app.canvas.height / 2 + 15;
+
+    this._level.x = this._app.canvas.width / 2 - this._level.width / 2;
+    this._level.y = this._app.canvas.height / 2 + 50;
 
     this._background = new Sprite(
       "idle",
@@ -62,7 +77,7 @@ export default class Loose implements Scene {
   }
 
   public start = () => {
-    this.view.addChild(this._background, this._title, this._score);
+    this.view.addChild(this._background, this._title, this._score, this._level);
     this._title.onClick(this.onStart);
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") this.onPause();
