@@ -1,3 +1,6 @@
-const random = (max: number) => Math.floor(Math.random() * max) + 1;
+const random = (min: number, max: number, isFloat?: boolean) =>
+  !isFloat
+    ? Math.floor(Math.random() * (max - min + 1)) + min
+    : Math.random() * (max - min) + min;
 
 export default random;

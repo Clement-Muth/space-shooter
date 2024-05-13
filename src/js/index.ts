@@ -29,6 +29,7 @@ import Menu from "./scenes/menu";
         .toString()
         .padStart(3, "0")}.jpg`,
     })),
+    { alias: "asteroid", src: "/public/static/assets/asteroid.png" },
   ]);
 
   const level1 = new InGame({ size: application.screen });
