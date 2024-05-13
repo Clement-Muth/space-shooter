@@ -31,6 +31,8 @@ import Menu from "./scenes/menu";
         .padStart(3, "0")}.jpg`,
     })),
     { alias: "asteroid", src: "/public/static/assets/asteroid.png" },
+    { alias: "missile-red", src: "/public/static/assets/missile-red.png" },
+    { alias: "missile-blue", src: "/public/static/assets/missile-blue.png" },
   ]);
 
   const game = new InGame({

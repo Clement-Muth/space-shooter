@@ -51,10 +51,10 @@ export default class Level implements Scene {
       this.size.height,
       random(15, 100),
       {
-        cohesionRadius: random(15, 200),
-        alignmentRadius: random(15, 200),
-        attractionRadius: random(15, 200),
-        separationRadius: random(15, 200),
+        cohesionRadius: 100,
+        alignmentRadius: 50,
+        attractionRadius: 50,
+        separationRadius: 30,
       },
     );
 
@@ -91,6 +91,8 @@ export default class Level implements Scene {
         this._ships,
       );
 
+      for (const ship of this._ships) ship.update(6);
+
       for (const collision of boidShipCollisions) {
         const boid = collision.boid;
         const ship = collision.ship;
@@ -117,22 +119,28 @@ export default class Level implements Scene {
       asteroid.render(this._app.ctx, []);
       asteroid.update();
       const ship = this.checkCollisionWithShip(asteroid);
+      const missile = this.checkCollisionWithAsteroid(asteroid);
 
-      if (ship) {
-        for (const player of this._players) {
-          if (player.ship === ship) {
-            player.onLoose();
-          }
-        }
-      }
+      if (missile)
+        this._asteroids[this._asteroids.indexOf(asteroid)].update(true);
+
+      if (ship)
+        for (const player of this._players)
+          if (player.ship === ship) player.onLoose();
     }
   };
 
   private checkCollisionWithShip = (asteroid: Asteroid): Ship | false => {
+    for (const ship of this._ships)
+      if (asteroid.checkCollisionWithShip(ship)) return ship;
+
+    return false;
+  };
+
+  private checkCollisionWithAsteroid = (asteroid: Asteroid): any | false => {
     for (const ship of this._ships) {
-      if (asteroid.checkCollisionWithShip(ship)) {
-        return ship;
-      }
+      for (const missile of ship.missiles)
+        if (missile.checkCollisionWithasteroid(asteroid)) return missile;
     }
     return false;
   };

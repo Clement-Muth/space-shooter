@@ -11,6 +11,7 @@ const Player2 = () =>
         west: "ArrowLeft",
       },
       size: { width: 70, height: 70 },
+      color: "blue",
     }),
   );
 
