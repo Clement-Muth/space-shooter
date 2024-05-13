@@ -57,11 +57,27 @@ export default class Container {
    * @param childToRemove The child to remove from the container.
    * @returns The container instance.
    */
-  public removeChild(childToRemove: any) {
-    const index = this.children.indexOf(childToRemove);
-    if (index !== -1) this.children.splice(index, 1);
+  public removeChild<U extends any[]>(...children: U): U[0] {
+    for (const child of children) {
+      const index = this.children.indexOf(child);
+      if (index !== -1) this.children.splice(index, 1);
+    }
 
     return this;
+  }
+
+  public hasChild<U>(child: U): boolean {
+    if (this.children.includes(child)) {
+      return true;
+    }
+
+    for (const c of this.children) {
+      if (c instanceof Container && c.hasChild(child)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**

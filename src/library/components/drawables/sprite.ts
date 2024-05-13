@@ -12,12 +12,17 @@ interface SpriteFrame {
 
 interface AnimationSpriteFrame {
   idle: SpriteFrame[];
-  moveSouth: SpriteFrame[];
-  moveNorth: SpriteFrame[];
-  moveEast: SpriteFrame[];
-  moveWest: SpriteFrame[];
-  layDown: SpriteFrame[];
+  moveSouth?: SpriteFrame[];
+  moveNorth?: SpriteFrame[];
+  moveEast?: SpriteFrame[];
+  moveWest?: SpriteFrame[];
+  layDown?: SpriteFrame[];
 }
+
+type Size = {
+  width: number;
+  height: number;
+};
 
 /**
  * Sprite Class
@@ -32,14 +37,12 @@ export default class Sprite implements View {
   public y: number;
 
   /**
-   * Indicates if the sprite is interactive.
-   */
-  public interactive: boolean;
-
-  /**
    * The list of all possible animation frames of the sprite.
    */
   public animationFrames: AnimationSpriteFrame;
+
+  public width: number;
+  public height: number;
 
   /**
    * The list of animation frames of the sprite.
@@ -63,14 +66,17 @@ export default class Sprite implements View {
   constructor(
     defaultFrames: keyof AnimationSpriteFrame,
     animationFrames: AnimationSpriteFrame,
+    size: Size,
   ) {
     this.x = 0;
     this.y = 0;
-    this.interactive = false;
     this.animationFrames = animationFrames;
-    this.frames = this.animationFrames[defaultFrames];
+    this.frames =
+      this.animationFrames[defaultFrames] ?? this.animationFrames.idle;
     this.currentFrameIndex = 0;
     this.currentFrameStartTime = 0;
+    this.width = size.width;
+    this.height = size.height;
   }
 
   public udpateFrames = (frames: SpriteFrame[]) => {
@@ -96,19 +102,4 @@ export default class Sprite implements View {
       this.currentFrameStartTime = now;
     }
   };
-
-  /**
-   * Checks if the mouse is over the sprite.
-   * @param x The x-coordinate of the mouse position.
-   * @param y The y-coordinate of the mouse position.
-   * @param ctx The rendering context of the canvas.
-   * @param parents The parent containers for calculating position.
-   * @returns True if the mouse is over the sprite, otherwise False.
-   */
-  public isMouseOver = (
-    _x: number,
-    _y: number,
-    _ctx: CanvasRenderingContext2D,
-    _parents: Container[],
-  ) => false;
 }

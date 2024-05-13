@@ -9,6 +9,8 @@ import Ticker from "./components/functions/ticker";
  * It initializes a canvas, manages its rendering context, and handles mouse events.
  */
 export default class Application {
+  private static instance: Application | null = null;
+
   /**
    * The HTML canvas element for the application.
    */
@@ -29,6 +31,12 @@ export default class Application {
    * The ticker for updating the application.
    */
   public ticker: Ticker;
+
+  public static getInstance(): Application {
+    if (!Application.instance) Application.instance = new Application();
+
+    return Application.instance;
+  }
 
   private mouseX: number;
   private mouseY: number;
@@ -80,8 +88,9 @@ export default class Application {
   private loop = () => {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    for (const child of this.stage.children)
+    for (const child of this.stage.children) {
       child.render(this.ctx, [this.stage]);
+    }
 
     requestAnimationFrame(this.loop.bind(this));
   };
@@ -101,7 +110,7 @@ export default class Application {
       }
       if (
         child.interactive &&
-        child.isMouseOver(this.mouseX, this.mouseY, this.ctx, parents)
+        child.isMouseOver?.(this.mouseX, this.mouseY, this.ctx, parents)
       ) {
         this.canvas.style.cursor = "pointer";
         return;

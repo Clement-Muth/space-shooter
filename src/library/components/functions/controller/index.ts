@@ -1,65 +1,75 @@
 import type Sprite from "../../drawables/sprite";
 import Ticker from "../ticker";
 
+export type Controle = {
+  north: string;
+  south: string;
+  east: string;
+  west: string;
+};
+
+const getKeyByValue = (obj: object, value: string) =>
+  Object.keys(obj).find((key) => (obj[key] === value ? key : undefined));
+
 export default class Controller {
-  private _keyPresses: {
-    z?: boolean;
-    Z?: boolean;
-    s?: boolean;
-    S?: boolean;
-    q?: boolean;
-    Q?: boolean;
-    d?: boolean;
-    D?: boolean;
-  } = {};
+  private _keyPresses: Record<keyof Controle, boolean> = {
+    east: false,
+    north: false,
+    south: false,
+    west: false,
+  };
   private _ticker: Ticker;
   private _sprite: Sprite;
   private _speed: number;
 
-  constructor(sprite: Sprite, speed: number) {
+  constructor(
+    sprite: Sprite,
+    speed: number,
+    private readonly controle: Controle,
+  ) {
     this._ticker = new Ticker();
     this._sprite = sprite;
     this._speed = speed;
 
     this._ticker.add(() => {
-      if (this._keyPresses.z || this._keyPresses.Z)
-        this._sprite.y -= this._speed;
-      else if (this._keyPresses.s || this._keyPresses.S)
-        this._sprite.y += this._speed;
+      if (this._keyPresses.north) this._sprite.y -= this._speed;
+      else if (this._keyPresses.south) this._sprite.y += this._speed;
 
-      if (this._keyPresses.q || this._keyPresses.Q)
-        this._sprite.x -= this._speed;
-      else if (this._keyPresses.d || this._keyPresses.D)
-        this._sprite.x += this._speed;
+      if (this._keyPresses.west) this._sprite.x -= this._speed;
+      else if (this._keyPresses.east) this._sprite.x += this._speed;
     });
 
-    this._onStop((event) => {
-      if (!event.repeat) this._updateSpriteFramesOnKeyChange(event.key);
-      this._keyPresses[event.key] = true;
+    this._onStop((event): void => {
+      this._keyPresses[getKeyByValue(this.controle, event.key)!] = false;
+      this._updateSpriteFramesOnKeyChange(
+        Object.keys(this._keyPresses).find((key) =>
+          this._keyPresses[key] === true ? key : undefined,
+        ),
+      );
     });
-    this._onMove((event) => {
-      this._keyPresses[event.key] = false;
-      if (Object.values(this._keyPresses).some((v) => v))
-        this._updateSpriteFramesOnKeyChange(
-          Object.keys(this._keyPresses).filter((k) => this._keyPresses[k])[0],
-        );
-      else this._sprite.udpateFrames(this._sprite.animationFrames.idle);
+    this._onMove((event): void => {
+      if (event.repeat) return;
+      this._keyPresses[getKeyByValue(this.controle, event.key)!] = true;
+      if (!getKeyByValue(this.controle, event.key)) return;
+      this._updateSpriteFramesOnKeyChange(
+        getKeyByValue(this.controle, event.key),
+      );
     });
   }
 
-  private _updateSpriteFramesOnKeyChange = (expr: unknown) => {
-    switch (expr) {
-      case "s":
-        this._sprite.udpateFrames(this._sprite.animationFrames.moveSouth);
+  private _updateSpriteFramesOnKeyChange = (direction: string | undefined) => {
+    switch (direction) {
+      case "south":
+        this._sprite.udpateFrames(this._sprite.animationFrames.moveSouth!);
         break;
-      case "z":
-        this._sprite.udpateFrames(this._sprite.animationFrames.moveNorth);
+      case "north":
+        this._sprite.udpateFrames(this._sprite.animationFrames.moveNorth!);
         break;
-      case "q":
-        this._sprite.udpateFrames(this._sprite.animationFrames.moveWest);
+      case "west":
+        this._sprite.udpateFrames(this._sprite.animationFrames.moveWest!);
         break;
-      case "d":
-        this._sprite.udpateFrames(this._sprite.animationFrames.moveEast);
+      case "east":
+        this._sprite.udpateFrames(this._sprite.animationFrames.moveEast!);
         break;
       default:
         this._sprite.udpateFrames(this._sprite.animationFrames.idle);
@@ -67,9 +77,9 @@ export default class Controller {
   };
 
   private _onStop = (cb: (event: KeyboardEvent) => void) =>
-    window.addEventListener("keydown", cb);
+    window.addEventListener("keyup", cb);
 
   private _onMove = (cb: (event: KeyboardEvent) => void) => {
-    window.addEventListener("keyup", cb, false);
+    window.addEventListener("keydown", cb);
   };
 }
