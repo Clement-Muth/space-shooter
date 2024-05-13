@@ -6,6 +6,15 @@
 
 Space shooter game like, Two players
 
+## Controle
+
+First player (red) can move with "w, a, q, d"
+Second player (blue) can move with arrow keys
+
+## Goal
+
+Collect all moving points; once you're done, you can go to the next.
+
 ## Installation
 
 ```bash
