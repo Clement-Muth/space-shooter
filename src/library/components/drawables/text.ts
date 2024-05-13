@@ -1,3 +1,4 @@
+import Application from "../../application";
 import type Container from "../containers/container";
 import type View from "../containers/view";
 
@@ -66,6 +67,10 @@ export default class Text implements View {
    */
   public text: string;
 
+  public width: number;
+
+  private _app = Application.getInstance();
+
   /**
    * Indicates whether the text is interactive.
    */
@@ -89,6 +94,7 @@ export default class Text implements View {
     this.text = text;
     this.interactive = false;
     this.style = { ...new TextStyle(), ...style };
+    this.width = this._app.ctx.measureText(this.text).width;
   }
 
   /**

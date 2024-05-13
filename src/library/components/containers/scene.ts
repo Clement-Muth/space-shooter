@@ -4,5 +4,5 @@ export default class Scene {
   public view: Container;
 
   public start: () => Container;
-  public stop: (view: Container) => void;
+  public stop: () => void;
 }

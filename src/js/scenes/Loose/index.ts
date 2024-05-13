@@ -39,10 +39,10 @@ export default class Loose implements Scene {
       style: { fontFamily: "Orbitron" },
     });
 
-    this._title.x = this._app.canvas.width / 2 - 80;
+    this._title.x = this._app.canvas.width / 2 - this._title.width / 2;
     this._title.y = this._app.canvas.height / 2 - 20;
 
-    this._score.x = this._app.canvas.width / 2 - 135;
+    this._score.x = this._app.canvas.width / 2 - this._score.width / 2;
     this._score.y = this._app.canvas.height / 2 + 15;
 
     this._background = new Sprite(

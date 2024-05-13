@@ -42,7 +42,9 @@ export default class Player implements Scene {
 
   public start: () => Container;
 
-  public stop: (view: Container) => void;
+  public stop = () => {
+    this.ship.detroy();
+  };
 
   public onLoose = () => {
     this.status = "loose";
