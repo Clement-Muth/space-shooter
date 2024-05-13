@@ -1,5 +1,4 @@
 import { type Container, Texture, TilingSprite } from "../../../library";
-import random from "../../../library/utils/random";
 import type Ship from "../../characters/Ship";
 
 interface AsteroidProps {
@@ -41,11 +40,11 @@ export default class Asteroid {
     this.speed = speed;
   }
 
-  public update = () => {
+  public update = (force?: boolean) => {
     this.y += this.speed; // Move the asteroid downwards
 
     // Reset position if it goes off the bottom of the canvas
-    if (this.y > window.innerHeight) {
+    if (this.y > window.innerHeight || force) {
       this.x = Math.random() * (window.innerWidth - this.asteroid.width);
       this.y = -this.asteroid.height;
     }
