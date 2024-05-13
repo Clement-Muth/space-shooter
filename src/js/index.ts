@@ -1,5 +1,6 @@
 import { Application, Assets } from "../library";
 import { shipAssets } from "./characters/Ship/assets";
+import Loose from "./scenes/Loose";
 import InGame from "./scenes/inGame";
 import Menu from "./scenes/menu";
 
@@ -32,14 +33,26 @@ import Menu from "./scenes/menu";
     { alias: "asteroid", src: "/public/static/assets/asteroid.png" },
   ]);
 
-  const level1 = new InGame({ size: application.screen });
+  const game = new InGame({
+    size: application.screen,
+    onLoose: (player) => {
+      game.stop();
+      application.stage.addChild(
+        new Loose({
+          onPause: () => {},
+          onStart: () => {},
+          player: player,
+        }).start(),
+      );
+    },
+  });
   const menu = new Menu({
     onStart: () => {
       menu.stop();
-      application.stage.addChild(level1.start());
+      application.stage.addChild(game.start());
     },
     onPause: () => {
-      application.stage.removeChild(level1.view).addChild(menu.view);
+      application.stage.removeChild(game.view).addChild(menu.view);
     },
   });
 

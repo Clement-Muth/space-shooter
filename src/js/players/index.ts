@@ -5,6 +5,8 @@ export default class Player implements Scene {
   public view: Container;
   public ship: Ship;
   public score: Text;
+  public status: "win" | "loose" | undefined;
+  public id: 1 | 2;
 
   private _app: Application = Application.getInstance();
 
@@ -13,6 +15,8 @@ export default class Player implements Scene {
     private readonly _isFirstPlayer?: boolean,
   ) {
     this.ship = ship;
+    this.status = undefined;
+    this.id = _isFirstPlayer ? 1 : 2;
 
     this.score = new Text({
       text: "00000",
@@ -39,4 +43,8 @@ export default class Player implements Scene {
   public start: () => Container;
 
   public stop: (view: Container) => void;
+
+  public onLoose = () => {
+    this.status = "loose";
+  };
 }

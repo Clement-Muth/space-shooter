@@ -16,10 +16,15 @@ export default class InGame implements Scene {
   private _ticker: Ticker;
   private _players: Player[] = [];
   private _isChangingLevel: boolean;
+  private _onLoose: (player: Player) => void;
 
-  constructor({ size }) {
+  constructor({
+    size,
+    onLoose,
+  }: { size: any; onLoose: (player: Player) => void }) {
     this.view = new Container();
     this.size = size;
+    this._onLoose = onLoose;
 
     this._players.push(Player1(), Player2());
     this._players.map((player) => player.initPlayer());
@@ -68,6 +73,15 @@ export default class InGame implements Scene {
     this._isChangingLevel = false;
   };
 
+  private _gameEventListener = () => {
+    for (const player of this._players) {
+      if (player.status === "loose") {
+        this._onLoose(player);
+      }
+    }
+    this._isOutsideBondary();
+  };
+
   public start = () => {
     this.view.addChild(
       this._level.start(),
@@ -75,13 +89,14 @@ export default class InGame implements Scene {
       ...this._players.map((player) => player.ship).map((c) => c.view),
     );
 
-    this._ticker.add(this._isOutsideBondary);
+    this._ticker.add(this._gameEventListener);
 
     return this.view;
   };
 
   public stop = () => {
     clearInterval(this._startInterval);
-    this._ticker.remove(this._isOutsideBondary);
+    this._ticker.remove(this._gameEventListener);
+    this._level.stop(this.view);
   };
 }
